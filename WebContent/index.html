@@ -1,0 +1,91 @@
+<html>
+<title>SkedMe Web Application</title>
+  <head>
+    <script type="text/javascript">
+      var CLIENT_ID = '770135276203-b38f28kar7hkba3uks7dl5litj9diskq.apps.googleusercontent.com';
+      var apiKey = 'AIzaSyBipEj4Vu9VEkt_YuFgthDxPypCJQPPAok';
+      var SCOPES = ["https://www.googleapis.com/auth/calendar.readonly","https://www.googleapis.com/auth/calendar"];
+      var calID = "saar.c77@gmail.com";
+
+      function checkAuth() {
+    	gapi.client.setApiKey(apiKey);
+        gapi.auth.authorize(
+          {
+            'client_id': CLIENT_ID,
+            'scope': SCOPES.join(' '),
+            'immediate': true
+          }, handleAuthResult);
+      }
+
+      function handleAuthResult(authResult) {
+        var authorizeDiv = document.getElementById('authorize-div');
+        if (authResult && !authResult.error) {
+          // Hide auth UI, then load client library.
+          authorizeDiv.style.display = 'none';
+          //loadCalendarApi();
+          window.location.replace("home.html");
+        } else {
+          // Show auth UI, allowing the user to initiate authorization by
+          // clicking authorize button.
+          authorizeDiv.style.display = 'inline';
+        }
+      }
+
+      function handleAuthClick(event) {
+        gapi.auth.authorize(
+          {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+          handleAuthResult);
+        return false;
+      }
+
+      function loadCalendarApi() {
+        gapi.client.load('calendar', 'v3', listUpcomingEvents);
+      }
+
+      function listUpcomingEvents() {
+        var request = gapi.client.calendar.freebusy.query({
+        	"timeMin": "2015-12-13T23:38:51.841Z",
+        	"timeMax": "2015-12-20T23:38:51.841Z", 
+        	  "timeZone": "America/Toronto",
+        	  "items": [
+        	    {
+        	      "id": calID
+        	    }
+        	  ]
+        });
+
+        request.execute(function(resp) {
+        	var calID = "saar.c77@gmail.com";
+        	var entries = resp.calendars[0].calID.busy.length;
+        	for(var i=0;i<entries;i++){
+        		document.writeln(resp.calendars[0].calID.busy[i].start+" to "+resp.calendars[0].calID.busy[i].end)
+        	}
+        });
+      }
+
+      function appendPre(message) {
+        var pre = document.getElementById('output');
+        var textContent = document.createTextNode(message + '\n');
+        pre.appendChild(textContent);
+      }
+
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth">
+    </script>
+  </head>
+  <body>
+    <div id="authorize-div" style="width:800px; margin:0 auto;display: none;text-align:center;">
+      <h1>Welcome to SkedMe</h1>
+      <!--Button for the user to click to initiate auth sequence -->
+      <!-- <button id="authorize-button" onclick="handleAuthClick(event)">
+        Sign in with Google ID
+      </button> -->
+
+      <form>
+      <img src = "images/SkedMe.png" alt = "SkedMe" width = "300" height = "200" >
+      	<input type="image" id="authorize-button" onclick="handleAuthClick(event)" src="images/btn_signin.png" alt="Submit"/>
+      </form>
+    </div>
+    <pre id="output"></pre>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/>
+		<title>SkedMe</title>
+		<style>
+		.disabledTimeSlot{
+			background:grey!important;
+		}
+		</style>
+		
+		<script src="resources/sap-ui-core.js"
+				id="sap-ui-bootstrap"
+				data-sap-ui-libs="sap.m,sap.ui.layout,sap.ui.unified,sap.suite.ui.commons"
+				data-sap-ui-theme="sap_bluecrystal">
+		</script>
+		<script src="https://apis.google.com/js/client.js"></script>
+		
+		<!-- only load the mobile lib "sap.m" and the "sap_bluecrystal" theme -->
+		
+		<script>
+				sap.ui.localResources("skedme");
+				
+				var app = new sap.m.App();
+				var homePage = sap.ui.view({id:"idHome", viewName:"skedme.Home", type:sap.ui.core.mvc.ViewType.JS});
+							
+				var setMeUpPage = sap.ui.view({id:"idSetMeUp", viewName:"skedme.setMeUp", type:sap.ui.core.mvc.ViewType.JS});
+				var myProfilePage = sap.ui.view({id:"idProfile", viewName:"skedme.Profile", type:sap.ui.core.mvc.ViewType.JS});
+				var myAppointmentsPage = sap.ui.view({id:"idAppointment", viewName:"skedme.myAppointments", type:sap.ui.core.mvc.ViewType.JS});
+				var myRecentsPage = sap.ui.view({id:"idRecent", viewName:"skedme.myRecents", type:sap.ui.core.mvc.ViewType.JS});
+				var schedularPage = sap.ui.view({id:"idSchedular", viewName:"skedme.schedular", type:sap.ui.core.mvc.ViewType.JS});
+				
+				var splitContainer = new sap.m.SplitContainer("myNavPane",{
+					masterPages:[homePage],
+					detailPages:[setMeUpPage,myProfilePage,myAppointmentsPage,myRecentsPage,schedularPage]
+				});
+				app.addPage(splitContainer);
+				var shell = new sap.m.Shell({
+					app:app
+				});
+				shell.placeAt("content");
+				
+		</script>
+		
+		
+
+	</head>
+	
+	<body class="sapUiBody" role="application">
+		<div id="content"></div>
+	</body>
+</html>
